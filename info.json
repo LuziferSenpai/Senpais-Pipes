@@ -1,0 +1,10 @@
+{
+  "name": "Senpais_Pipes",
+  "version": "0.1.0",
+  "title": "Senpais Pipes",
+  "author": "LuziferSenpai",
+  "Licence": "Custom",
+  "description": "Adds Custom Pipes for Vanilla and Modded!",
+  "dependencies": ["base >= 0.16"],
+  "factorio_version": "0.16"
+}

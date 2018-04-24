@@ -1,0 +1,1 @@
+data.raw["gui-style"]["default"]["Senpais-Pipe-Table"] = { type = "table_style", cell_spacing = 5, horizontal_spacing = 5, vertical_spacing = 5 }6
