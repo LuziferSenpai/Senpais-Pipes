@@ -36,15 +36,16 @@ for _, o in pairs( data.raw["pipe"] ) do
 			new_pipe.subgroup = "pipe-subgroup-" .. subpad .. subgroupnumber
 			new_pipe.order = "pipe-" .. orderpad .. ordernumber
 			new_pipe.fluid_box = { base_area = o.fluid_box.base_area, pipe_connections = b.connec }
+			new_pipe.localised_name = { "entity-name.Senpais-Pipes", { "entity-name." .. o.name }, { "Senpais-Pipes." .. sides } }
 			if sides == "void" then
 				table.insert( new_pipe.icons, { icon = MODNAME .. "/graphics/pipe_indication_void.png" } )
-				for name in pairs( connections ) do
+				for _, name in pairs( connections ) do
 					new_pipe.pictures[name] = { layers = { new_pipe.pictures[name], void_icon } }
 				end
 			else
 				local texture = o.pictures[b.tex]
 				if sides:find( "void" ) then
-					for name in pairs( connections ) do
+					for _, name in pairs( connections ) do
 						new_pipe.pictures[name] = { layers = { texture, void_icon } }
 					end
 					if sides:find( "N" ) then
@@ -60,7 +61,7 @@ for _, o in pairs( data.raw["pipe"] ) do
 						table.insert( new_pipe.icons, pipe_dir_void.W )
 					end
 				else
-					for name in pairs( connections ) do
+					for _, name in pairs( connections ) do
 						new_pipe.pictures[name] = texture
 					end
 					if sides:find( "N" ) then
