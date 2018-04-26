@@ -92,6 +92,21 @@ script.on_event( defines.events.on_built_entity, function( event )
 		if global.PlayerDATA[player.index].void then
 			name = name .. "-void"
 		end
-		surface.create_entity{ name = name, position = position, force = force }
+		local new_enity = surface.create_entity{ name = name, position = position, force = force }
+		if global.PlayerDATA[player.index].void then
+			table.insert( global.VoidPipes, new_enity )
+		end
+	end
+end )
+
+script.on_event( defines.events.on_tick, function( event )
+	if #global.VoidPipes > 0 and event.tick % ( game.speed * 60 ) == 0 then
+		for o, pipe in pairs( global.VoidPipes ) do
+			if pipe.valid then
+				pipe.fluidbox[1] = nil
+			else
+				table.remove( global.VoidPipes, o )
+			end
+		end
 	end
 end )
