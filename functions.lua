@@ -24,19 +24,19 @@ function functions.GUI( player, name, void )
 	local A02 = { functions.Add_Table( A01, "SenpaisPipesTable01", 2 ),
 				  functions.Add_Table( A01, "SenpaisPipesTable02", 3 ) }
 	local A03 = { functions.Add_Sprite_Button( A02[1], "SenpaisPipesSpriteButton01", "entity/" .. name, style ),
-				  functions.Add_Sprite_Button( A02[1], "SenpaisPipesSpriteButton02", "entity/" .. name .. "-void", style ),
-				  functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton030", "entity/" .. name, style ) }
+				  functions.Add_Sprite_Button( A02[1], "SenpaisPipesSpriteButton02", "entity/" .. name .. "-void", style ) }
 	if void then
 		A03[2].style = "Senpais-Pipes-Button-active"
-		style = "Senpais-Pipes-Button-active"
+		local A04 = functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton030", "entity/" .. name .. "-void", style )
 	else
 		A03[1].style = "Senpais-Pipes-Button-active"
+		local A04 = functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton030", "entity/" .. name, style )
 	end
 	for p = 1, #functions.directions do
 		if void then
-			local A04 = functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton03" .. p, "entity/" .. name .. "-" .. functions.directions[p] .. "-void", style )
+			local A05 = functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton03" .. p, "entity/" .. name .. "-" .. functions.directions[p] .. "-void", style )
 		else
-			local A04 = functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton03" .. p, "entity/" .. name .. "-" .. functions.directions[p], style )
+			local A05 = functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton03" .. p, "entity/" .. name .. "-" .. functions.directions[p], style )
 		end
 	end
 end

@@ -1,5 +1,4 @@
 require "mod-gui"
-require "config"
 
 local functions = require "functions"
 
@@ -47,7 +46,6 @@ script.on_event( defines.events.on_gui_click, function( event )
 		element.style = "Senpais-Pipes-Button-active"
 		if element.name == "SenpaisPipesSpriteButton030" then
 			global.PlayerDATA[player.index].currentselected = ""
-			break
 		else
 			for u = 1, #functions.directions do
 				if element.name == "SenpaisPipesSpriteButton03" .. u then
@@ -56,6 +54,7 @@ script.on_event( defines.events.on_gui_click, function( event )
 				end
 			end
 		end
+		return
 	end
 end )
 
@@ -65,11 +64,14 @@ end )
 
 script.on_event( defines.events.on_player_cursor_stack_changed, function( event )
 	local player = game.players[event.player_index]
-	local item_name = player.cursor_stack.name
 	if mod_gui.get_frame_flow( player ).SenpaisPipesFrame then mod_gui.get_frame_flow( player ).SenpaisPipesFrame.destroy() end
-	global.PlayerDATA[player.index] = { currentselected = "", void = false, item_name = item_name }
-	if game.entity_prototypes[item_name] and game.entity_prototypes[item_name].type == "pipe" then
-		functions.GUI( mod_gui.get_frame_flow( player ), item_name, false )
+	global.PlayerDATA[player.index] = { currentselected = "", void = false, item_name = "" }
+	if player.cursor_stack and player.cursor_stack.valid and player.cursor_stack.valid_for_read then
+		local item_name = player.cursor_stack.name
+		global.PlayerDATA[player.index].item_name = item_name
+		if game.entity_prototypes[item_name] and game.entity_prototypes[item_name].type == "pipe" then
+			functions.GUI( mod_gui.get_frame_flow( player ), item_name, false )
+		end
 	end
 end )
 
@@ -79,7 +81,7 @@ script.on_event( defines.events.on_built_entity, function( event )
 		local entity = event.created_entity
 		local position = entity.position
 		local force = entity.force
-		local name = item_name
+		local name = global.PlayerDATA[player.index].item_name
 		local surface = entity.surface
 		entity.destroy()
 		if global.PlayerDATA[player.index].currentselected ~= "" then
