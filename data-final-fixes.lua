@@ -2,7 +2,7 @@ require "config"
 
 local MODNAME = "__Senpais_Pipes__"
 
---data:extend( { { type = "item-group", name = "Senpais-Pipes", icon = MODNAME .. "/graphics/icon.png", icon_size = 32, order = "gg" } } )
+data:extend( { { type = "item-group", name = "Senpais-Pipes", icon = MODNAME .. "/graphics/icon.png", icon_size = 32, order = "gg" } } )
 
 local subgroupnumber = 0
 local pipe_entitys = {}
@@ -20,83 +20,69 @@ for _, a in pairs { "N", "E", "S", "W" } do
 	pipe_dir_void[a] = { icon = MODNAME .. "/graphics/pipe_indication_" .. a .. ".png", tint = { r = 0.6, g = 0, b = 0.6 } }
 end
 
-for _, i in pairs( data.raw["pipe"] ) do
-	if not Senpais.Pipes.NOCOPYS[i.name] then
-		table.insert( pipe_entitys, i )
+for _, o in pairs( data.raw["pipe"] ) do
+	if not Senpais.Pipes.NOCOPYS[o.name] then
+		subgroupnumber = subgroupnumber + 1
+		if subgroupnumber < 10 then subpad = "0" else subpad = "" end
+		data:extend( { { type = "item-subgroup", name = "pipe-subgroup-" .. subpad .. subgroupnumber, group = "Senpais-Pipes", order = subpad .. subgroupnumber } } )
+		local ordernumber = 0
+		for sides, b in pairs( Senpais.Pipes.Directions ) do
+			ordernumber = ordernumber + 1
+			if ordernumber < 10 then orderpad = "0" else orderpad = "" end
+			local new_pipe = util.table.deepcopy( data.raw["pipe"][o.name] )
+			new_pipe.name = o.name .. "-" .. sides
+			new_pipe.icon = nil
+			new_pipe.icons = { { icon = o.icon } }
+			new_pipe.subgroup = "pipe-subgroup-" .. subpad .. subgroupnumber
+			new_pipe.order = "pipe-" .. orderpad .. ordernumber
+			new_pipe.fluid_box = { base_area = o.fluid_box.base_area, pipe_connections = b.connec }
+			local texture = {}
+			if sides == "void" then
+				table.insert( new_pipe.icons, { icon = MODNAME .. "/graphics/pipe_indication_void.png" } )
+				for d = 1, #new_pipe.pictures do
+					new_pipe.pictures[d] = { layers = { void_icon, new_pipe.pictures[d] } }
+				end
+			else
+				local texture = o.pictures[b.tex]
+				if sides:find( "void" ) and not sides == "void" then
+					for _, d in pairs( connections ) do
+						new_pipe.pictures[d] = { layers = { void_icon, texture } }
+					end
+					if sides:find( "N" ) then
+						table.insert( new_pipe.icons, pipe_dir_void.N )
+					end
+					if sides:find( "E" ) then
+						table.insert( new_pipe.icons, pipe_dir_void.E )
+					end
+					if sides:find( "S" ) then
+						table.insert( new_pipe.icons, pipe_dir_void.S )
+					end
+					if sides:find( "W" ) then
+						table.insert( new_pipe.icons, pipe_dir_void.W )
+					end
+				elseif not sides == "void" then
+					for _, d in pairs( connections ) do
+						new_pipe.pictures[d] = texture
+					end
+					if sides:find( "N" ) then
+						table.insert( new_pipe.icons, pipe_dir.N )
+					end
+					if sides:find( "E" ) then
+						table.insert( new_pipe.icons, pipe_dir.E )
+					end
+					if sides:find( "S" ) then
+						table.insert( new_pipe.icons, pipe_dir.S )
+					end
+					if sides:find( "W" ) then
+						table.insert( new_pipe.icons, pipe_dir.W )
+					end
+				end
+			end
+			table.insert( pipe_entitys, new_pipe )
+		end
 	end
 end
 
-for _, o in pairs( pipe_entitys ) do
-	--subgroupnumber = subgroupnumber + 1
-	--if subgroupnumber < 10 then subpad = "0" else subpad = "" end
-	--data:extend( { { type = "item-subgroup", name = "pipe-subgroup-" .. subpad .. subgroupnumber, group = "Senpais-Pipes", order = subpad .. subgroupnumber } } )
-	--local ordernumber = 0
-	for sides, connec in pairs( Senpais.Pipes.Directions ) do
-		--ordernumber = ordernumber + 1
-		--if ordernumber < 10 then orderpad = "0" else orderpad = "" end
-		local new_pipe = util.table.deepcopy( data.raw["pipe"][o.name] )
-		new_pipe.name = o.name .. "-" .. sides
-		new_pipe.icon = nil
-		new_pipe.icons = { { icon = o.icon } }
-		--new_pipe.subgroup = "pipe-subgroup-" .. subpad .. subgroupnumber
-		--new_pipe.order = "pipe-" .. orderpad .. ordernumber
-		new_pipe.fluid_box = { base_area = o.fluid_box.base_area, pipe_connections = connec }
-		local texture = {}
-		if ( sides == "E-N-S" or sides == "E-N-S-void" ) then texture = o.pictures.t_right end
-		if ( sides == "E-S" or sides == "E-S-void" ) then texture = o.pictures.corner_down_right end
-		if ( sides == "E-W" or sides == "E-W-void" ) then texture = o.pictures.straight_horizontal end
-		if ( sides == "N-E" or sides == "N-E-void" ) then texture = o.pictures.corner_up_right end
-		if ( sides == "N-E-W" or sides == "N-E-W-void" ) then texture = o.pictures.t_up end
-		if ( sides == "N-S" or sides == "N-S-void" ) then texture = o.pictures.straight_vertical end
-		if ( sides == "N-W" or sides == "N-W-void" ) then texture = o.pictures.corner_up_left end
-		if ( sides == "S-W" or sides == "S-W-void" ) then texture = o.pictures.corner_down_left end
-		if ( sides == "S-W-E" or sides == "S-W-E-void" ) then texture = o.pictures.t_down end
-		if ( sides == "W-N-S" or sides == "W-N-S-void" ) then texture = o.pictures.t_left end
-		if sides:find( "void" ) then
-			if #connec < 4 then
-				for _, d in pairs( connections ) do
-					new_pipe.pictures[d] = { layers = { void_icon, texture } }
-				end
-			else
-				for _, d in pairs( new_pipe.pictures ) do
-					new_pipe.pictures[d] = { layers = { void_icon, new_pipe.pictures[d] } }
-				end
-			end
-		elseif #connec < 4 then
-			for _, d in pairs( connections ) do
-				new_pipe.pictures[d] = texture
-			end
-		end
-		if sides:find( "void" ) then
-			if sides:find( "N" ) then
-				table.insert( new_pipe.icons, pipe_dir_void.N )
-			end
-			if sides:find( "E" ) then
-				table.insert( new_pipe.icons, pipe_dir_void.E )
-			end
-			if sides:find( "S" ) then
-				table.insert( new_pipe.icons, pipe_dir_void.S )
-			end
-			if sides:find( "W" ) then
-				table.insert( new_pipe.icons, pipe_dir_void.W )
-			end
-		else
-			if sides:find( "N" ) then
-				table.insert( new_pipe.icons, pipe_dir.N )
-			end
-			if sides:find( "E" ) then
-				table.insert( new_pipe.icons, pipe_dir.E )
-			end
-			if sides:find( "S" ) then
-				table.insert( new_pipe.icons, pipe_dir.S )
-			end
-			if sides:find( "W" ) then
-				table.insert( new_pipe.icons, pipe_dir.W )
-			end
-		end
-		if sides == "void" then
-			table.insert( new_pipe.icons, { icon = MODNAME .. "/graphics/pipe_indication_void.png" } )
-		end
-		data:extend{ new_pipe }
-	end
+for u = 1, #pipe_entitys do
+	data:extend{ pipe_entitys[u] }
 end

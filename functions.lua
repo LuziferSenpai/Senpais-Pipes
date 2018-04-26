@@ -22,9 +22,10 @@ function functions.GUI( player, name, void )
 	local style = "Senpais-Pipes-Button"
 	local A01 = functions.Add_Frame( player, "SenpaisPipesFrame" )
 	local A02 = { functions.Add_Table( A01, "SenpaisPipesTable01", 2 ),
-				  functions.Add_Table( A01, "SenpaisPipesTable02", 2 ) }
+				  functions.Add_Table( A01, "SenpaisPipesTable02", 3 ) }
 	local A03 = { functions.Add_Sprite_Button( A02[1], "SenpaisPipesSpriteButton01", "entity/" .. name, style ),
-				  functions.Add_Sprite_Button( A02[1], "SenpaisPipesSpriteButton02", "entity/" .. name .. "-void", style ) }
+				  functions.Add_Sprite_Button( A02[1], "SenpaisPipesSpriteButton02", "entity/" .. name .. "-void", style ),
+				  functions.Add_Sprite_Button( A02[2], "SenpaisPipesSpriteButton030", "entity/" .. name, style ) }
 	if void then
 		A03[2].style = "Senpais-Pipes-Button-active"
 		style = "Senpais-Pipes-Button-active"

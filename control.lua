@@ -45,10 +45,15 @@ script.on_event( defines.events.on_gui_click, function( event )
 			child.style = "Senpais-Pipes-Button"
 		end
 		element.style = "Senpais-Pipes-Button-active"
-		for u = 1, #functions.directions do
-			if element.name == "SenpaisPipesSpriteButton03" .. u then
-				global.PlayerDATA[player.index].currentselected = functions.directions[u]
-				break
+		if element.name == "SenpaisPipesSpriteButton030" then
+			global.PlayerDATA[player.index].currentselected = ""
+			break
+		else
+			for u = 1, #functions.directions do
+				if element.name == "SenpaisPipesSpriteButton03" .. u then
+					global.PlayerDATA[player.index].currentselected = functions.directions[u]
+					break
+				end
 			end
 		end
 	end
