@@ -6,6 +6,13 @@ local functions = require "functions"
 script.on_init( function()
 	functions.globals()
 	functions.Players()
+	local pipes = {}
+	for _, entity in pairs( game.entity_prototypes ) do
+		if entity.type == "pipe" then
+			table.insert( pipes, entity.name )
+		end
+	end
+	game.write_file( "test/pipes.txt", serpent.block( pipes ) )
 end )
 
 script.on_configuration_changed( function() 

@@ -23,3 +23,7 @@ Senpais.Pipes.Directions["N-W-void"] = { { position = { 0, - 1 } }, { position =
 Senpais.Pipes.Directions["S-W-void"] = { { position = { 0, 1 } }, { position = { - 1, 0 } } }
 Senpais.Pipes.Directions["S-W-E-void"] = { { position = { 1, 0 } }, { position = { 0, 1 } }, { position = { - 1, 0 } } }
 Senpais.Pipes.Directions["W-N-S-void"] = { { position = { 0, - 1 } }, { position = { 0, 1 } }, { position = { - 1, 0 } } }
+
+Senpais.Pipes.NOCOPYS = {}
+Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector"] = true
+Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector-south"] = true

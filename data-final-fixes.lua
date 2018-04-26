@@ -21,29 +21,29 @@ for _, a in pairs { "N", "E", "S", "W" } do
 end
 
 for _, i in pairs( data.raw["pipe"] ) do
-	if ( not i.name == "factory-fluid-dummy-connector" or not i.name == "factory-fluid-dummy-connector-south" ) then
+	if not Senpais.Pipes.NOCOPYS[i.name] then
 		table.insert( pipe_entitys, i )
 	end
 end
 
 for _, o in pairs( pipe_entitys ) do
-	if subgroupnumber < 10 then subpad = "0" else subpad = "" end
 	subgroupnumber = subgroupnumber + 1
+	if subgroupnumber < 10 then subpad = "0" else subpad = "" end
 
 	data:extend( { { type = "item-subgroup", name = "pipe-subgroup-" .. subpad .. subgroupnumber, group = "Senpais-Pipes", order = subpad .. subgroupnumber } } )
 
 	local ordernumber = 0
 
 	for sides, connec in pairs( Senpais.Pipes.Directions ) do
-		if ordernumber < 10 then orderpad = "0" else orderpad = "" end
 		ordernumber = ordernumber + 1
-		
+		if ordernumber < 10 then orderpad = "0" else orderpad = "" end
+
 		local new_pipe = util.table.deepcopy( data.raw["pipe"][o.name] )
 		new_pipe.name = o.name .. "-" .. sides
 		new_pipe.icon = nil
 		new_pipe.icons = { { icon = o.icon } }
-		new_pipe_item.subgroup = "pipe-subgroup-" .. subpad .. subgroupnumber
-		new_pipe_item.order = "pipe-" .. orderpad .. ordernumber
+		--new_pipe.subgroup = "pipe-subgroup-" .. subpad .. subgroupnumber
+		--new_pipe.order = "pipe-" .. orderpad .. ordernumber
 		new_pipe.fluid_box = { base_area = o.fluid_box.base_area, pipe_connections = connec }
 
 		local texture = {}
@@ -79,15 +79,12 @@ for _, o in pairs( pipe_entitys ) do
 			if sides:find( "N" ) then
 				table.insert( new_pipe.icons, pipe_dir_void.N )
 			end
-
 			if sides:find( "E" ) then
 				table.insert( new_pipe.icons, pipe_dir_void.E )
 			end
-
 			if sides:find( "S" ) then
 				table.insert( new_pipe.icons, pipe_dir_void.S )
 			end
-
 			if sides:find( "W" ) then
 				table.insert( new_pipe.icons, pipe_dir_void.W )
 			end
@@ -95,15 +92,12 @@ for _, o in pairs( pipe_entitys ) do
 			if sides:find( "N" ) then
 				table.insert( new_pipe.icons, pipe_dir.N )
 			end
-
 			if sides:find( "E" ) then
 				table.insert( new_pipe.icons, pipe_dir.E )
 			end
-
 			if sides:find( "S" ) then
 				table.insert( new_pipe.icons, pipe_dir.S )
 			end
-
 			if sides:find( "W" ) then
 				table.insert( new_pipe.icons, pipe_dir.W )
 			end
@@ -113,6 +107,6 @@ for _, o in pairs( pipe_entitys ) do
 			table.insert( new_pipe.icons, { icon = MODNAME .. "/graphics/pipe_indication_void.png" } )
 		end
 
-		data:extend( { new_pipe } )
+		data:extend{ new_pipe }
 	end
 end
