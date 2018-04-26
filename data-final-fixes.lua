@@ -38,14 +38,14 @@ for _, o in pairs( data.raw["pipe"] ) do
 			new_pipe.fluid_box = { base_area = o.fluid_box.base_area, pipe_connections = b.connec }
 			if sides == "void" then
 				table.insert( new_pipe.icons, { icon = MODNAME .. "/graphics/pipe_indication_void.png" } )
-				for d = 1, #new_pipe.pictures do
-					new_pipe.pictures[d] = { layers = { void_icon, new_pipe.pictures[d] } }
+				for name in pairs( connections ) do
+					new_pipe.pictures[name] = { layers = { new_pipe.pictures[name], void_icon } }
 				end
 			else
 				local texture = o.pictures[b.tex]
 				if sides:find( "void" ) then
 					for name in pairs( connections ) do
-						new_pipe.pictures[name] = { layers = { void_icon, texture } }
+						new_pipe.pictures[name] = { layers = { texture, void_icon } }
 					end
 					if sides:find( "N" ) then
 						table.insert( new_pipe.icons, pipe_dir_void.N )

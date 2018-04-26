@@ -64,14 +64,16 @@ end )
 
 script.on_event( defines.events.on_player_cursor_stack_changed, function( event )
 	local player = game.players[event.player_index]
-	if mod_gui.get_frame_flow( player ).SenpaisPipesFrame then mod_gui.get_frame_flow( player ).SenpaisPipesFrame.destroy() end
-	global.PlayerDATA[player.index] = { currentselected = "", void = false, item_name = "" }
 	if player.cursor_stack and player.cursor_stack.valid and player.cursor_stack.valid_for_read then
 		local item_name = player.cursor_stack.name
-		global.PlayerDATA[player.index].item_name = item_name
-		if game.entity_prototypes[item_name] and game.entity_prototypes[item_name].type == "pipe" then
+		if item_name ~= global.PlayerDATA[player.index].item_name and game.entity_prototypes[item_name] and game.entity_prototypes[item_name].type == "pipe" then
+			global.PlayerDATA[player.index] = { currentselected = "", void = false, item_name = item_name }
+			if mod_gui.get_frame_flow( player ).SenpaisPipesFrame then mod_gui.get_frame_flow( player ).SenpaisPipesFrame.destroy() end
 			functions.GUI( mod_gui.get_frame_flow( player ), item_name, false )
 		end
+	else
+		global.PlayerDATA[player.index] = { currentselected = "", void = false, item_name = "" }
+		if mod_gui.get_frame_flow( player ).SenpaisPipesFrame then mod_gui.get_frame_flow( player ).SenpaisPipesFrame.destroy() end
 	end
 end )
 
