@@ -4,7 +4,7 @@ functions.directions = { "E-N-S", "E-S", "E-W", "N-E", "N-E-W", "N-S", "N-W", "S
 function functions.globals()
 	global.PlayerDATA = global.PlayerDATA or {}
 	global.Pipes = {}
-	global.VoidPipes = {}
+	global.VoidPipes = global.VoidPipes or {}
 	for _, item in pairs( game.item_prototypes ) do
 		if game.entity_prototypes[item.name] and game.entity_prototypes[item.name].type == "pipe" then
 			table.insert( global.Pipes, item.name )
