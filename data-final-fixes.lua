@@ -37,6 +37,7 @@ for _, o in pairs( data.raw["pipe"] ) do
 			new_pipe.order = "pipe-" .. orderpad .. ordernumber
 			new_pipe.fluid_box = { base_area = o.fluid_box.base_area, pipe_connections = b.connec }
 			new_pipe.localised_name = { "entity-name.Senpais-Pipes", { "entity-name." .. o.name }, { "Senpais-Pipes." .. sides } }
+			new_pipe.placeable_by = { item = o.name, count = o.minable and o.minable.count or 1 }
 			if sides == "void" then
 				table.insert( new_pipe.icons, { icon = MODNAME .. "/graphics/pipe_indication_void.png" } )
 				for _, name in pairs( connections ) do

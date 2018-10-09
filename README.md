@@ -13,6 +13,8 @@ this is a Update and rework of my old Modification [Straight Pipes](https://mods
  - Selected the Pipe which you want.
 
 ##Releases
+ - v0.1.2
+ 	- Now Blueprintable
  - v0.1.1
     - Fixed a Code Fail
  - v0.1.0
