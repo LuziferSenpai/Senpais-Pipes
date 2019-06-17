@@ -1,0 +1,16 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.2.0
+Date: 17.06.2019
+  Changes:
+    - Code cleanup
+    - better Script
+  Updates:
+    - Updated to Version 17
+---------------------------------------------------------------------------------------------------
+Older Versions:
+  Version: 0.1.2
+    - Now Blueprintable
+  Version: 0.1.1
+    - Fixed a Code Fail
+  Version: 0.1.0
+    - Release
