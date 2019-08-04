@@ -1,7 +1,5 @@
 require "config"
-
 local m = "__Senpais_Pipes__"
-
 data:extend
 {
 	{
@@ -12,12 +10,8 @@ data:extend
 		order = "gg"
 	}
 }
-
 local sn = 0
-local pe = {}
-local pd = {}
-local ps = {}
-local pdv = {}
+local pe, pd, ps, pdv = {}, {}, {}, {}
 local c =
 {
 	"straight_vertical_single",
@@ -45,20 +39,16 @@ local void_icon =
 	width = 32,
 	height = 32
 }
-
 for _, a in pairs { "N", "E", "S", "W" } do
 	pd[a] = { icon = m .. "/graphics/pipe_indication_" .. a .. ".png" }
 	ps[a] = { icon = m .. "/graphics/pipe_indication_shadow_" .. a .. ".png" }
 	pdv[a] = { icon = m .. "/graphics/pipe_indication_" .. a .. ".png", tint = { r = 0.6, g = 0, b = 0.6 } }
 end
-
 for _, o in pairs( data.raw["pipe"] ) do
 	if not Senpais.Pipes.NOCOPYS[o.name] then
 		local on = 0
 		sn = sn + 1
-
 		if sn < 10 then sp = "0" else sp = "" end
-
 		data:extend
 		{
 			{
@@ -68,12 +58,9 @@ for _, o in pairs( data.raw["pipe"] ) do
 				order = sp .. sn
 			}
 		}
-
 		for s, b in pairs( Senpais.Pipes.Directions ) do
 			on = on + 1
-
 			if on < 10 then op = "0" else op = "" end
-
 			local np = util.table.deepcopy( data.raw["pipe"][o.name] )
 			np.name = o.name .. "-" .. s
 			np.icon = nil
@@ -83,8 +70,9 @@ for _, o in pairs( data.raw["pipe"] ) do
 			np.fluid_box = { base_area = o.fluid_box.base_area, pipe_connections = b.connec }
 			np.localised_name = { "entity-name.Senpais-Pipes", {"entity-name." .. o.name }, { "Senpais-Pipes." .. s } }
 			np.placeable_by = { item = o.name, count = o.minable and o.minable.count or 1 }
-
 			if s == "void" then
+				np.type = "infinity-pipe"
+				np.gui_mode = "none"
 				table.insert( np.icons, { icon = m .. "/graphics/pipe_indication_void.png" } )
 				for _, name in pairs( c ) do
 					np.pictures[name] = { layers = { np.pictures[name], void_icon } }
@@ -92,6 +80,8 @@ for _, o in pairs( data.raw["pipe"] ) do
 			else
 				local texture = o.pictures[b.tex]
 				if s:find( "void" ) then
+					np.type = "infinity-pipe"
+					np.gui_mode = "none"
 					for _, name in pairs( c ) do
 						np.pictures[name] = { layers = { texture, void_icon } }
 					end
@@ -129,7 +119,6 @@ for _, o in pairs( data.raw["pipe"] ) do
 		end
 	end
 end
-
-for u = 1, #pe do
+for u = 1, table_size( pe ) do
 	data:extend{ pe[u] }
 end

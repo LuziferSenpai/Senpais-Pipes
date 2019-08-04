@@ -1,61 +1,85 @@
+require "config"
 local F = {}
-F.D = { "E-N-S", "E-S", "E-W", "N-E", "N-E-W", "N-S", "N-W", "S-W", "S-W-E", "W-N-S" }
-
+F.D =
+{
+	["E-N-S"] = true,
+	["E-S"] = true,
+	["E-W"] = true,
+	["N-E"] = true,
+	["N-E-W"] = true,
+	["N-S"] = true,
+	["N-W"] = true,
+	["S-W"] = true,
+	["S-W-E"] = true,
+	["W-N-S"] = true
+}
 F.Globals = function()
-	global.PlayerDATA = global.PlayerDATA or {}
 	global.Pipes = {}
-	global.VoidPipes = global.VoidPipes or {}
-	for _, item in pairs( game.item_prototypes ) do
-		if game.entity_prototypes[item.name] and game.entity_prototypes[item.name].type == "pipe" then
-			table.insert( global.Pipes, item.name )
+	global.GUIS = global.GUIS or {}
+	for _, e in pairs( game.entity_prototypes ) do
+		local n = e.name
+		if not Senpais.Pipes.NOCOPYS[n] and e.type == "pipe" then
+			if n:find( "void" ) then
+				return
+			else
+				for d, _ in pairs( F.D ) do
+					if n:find( d ) then
+						return
+					end
+				end
+			end
+			global.Pipes[n] = true
 		end
 	end
 end
-
 F.Players = function()
 	for _, p in pairs( game.players ) do
-		global.PlayerDATA[p.index] = { cs = "", v = false, ni = "" }
+		global.GUIS[p.index] = global.GUIS[p.index] or {}
 	end
 end
-
-F.GUI = function( p, n, v )
-	local A01 = F.AddFrame( p, "SenpaisPipesFrame01" )
-	local A02 =
+F.GUI = function( p, n, v, id )
+	local G = {}
+	G.A01 = F.AddFrame( p, "SenpaisPipesFrame01" )	
+	G.A02 =
 	{
-		F.AddTable( A01, "SenpaisPipesTable01", 2 ),
-		F.AddFrame( A01, "SenpaisPipesFrame02", "image_frame" )
+		F.AddTable( G.A01, "SenpaisPipesTable01", 2 ),
+		F.AddFrame( G.A01, "SenpaisPipesFrame02", "image_frame" ),
+		F.AddLabel( G.A01, "SenpaisPipesLabelWithDirection", n ),
+		F.AddLabel( G.A01, "SenpaisPipesLabelWithoutDirection", n )
 	}
-	local A03 =
+	G.A02[3].visible = false
+	G.A02[4].visible = false
+	G.A03 =
 	{
-		F.AddSpriteButton( A02[1], "SenpaisPipesSpriteButton01", "entity/" .. n ),
-		F.AddSpriteButton( A02[1], "SenpaisPipesSpriteButton02", "entity/" .. n .. "-void" ),
-		F.AddTable( A02[2], "SenpaisPipesTable02", 3 )
+		F.AddSpriteButton( G.A02[1], "SenpaisPipesSpriteButton01", "entity/" .. n ),
+		F.AddSpriteButton( G.A02[1], "SenpaisPipesSpriteButton02", "entity/" .. n .. "-void" ),
+		F.AddTable( G.A02[2], "SenpaisPipesTable02", 3 )
 	}
 	if v then
-		A03[2].style = "Senpais-Pipes-Button-active"
-		local A04 = F.AddSpriteButton( A03[3], n .. "-void", "entity/" .. n .. "-void" )
+		G.A03[2].style = "Senpais-Pipes-Button-active"
+		G.A04 = F.AddSpriteButton( G.A03[3], n .. "-void", "entity/" .. n .. "-void" )
 	else
-		A03[1].style = "Senpais-Pipes-Button-active"
-		local A04 = F.AddSpriteButton( A03[3], n, "entity/" .. n )
+		G.A03[1].style = "Senpais-Pipes-Button-active"
+		G.A04 = F.AddSpriteButton( G.A03[3], n, "entity/" .. n )
 	end
-	for p = 1, #F.D do
-		local d = F.D[p]
+	for d, _ in pairs( F.D ) do
 		if v then
-			local A05 = F.AddSpriteButton(A03[3], n .. "-" .. d .. "-void",  "entity/" .. n .. "-" .. d .. "-void" )
+			G.A05 = F.AddSpriteButton( G.A03[3], n .. "-" .. d .. "-void",  "entity/" .. n .. "-" .. d .. "-void" )
 		else
-			local A05 = F.AddSpriteButton(A03[3], n .. "-" .. d,  "entity/" .. n .. "-" .. d )
+			G.A05 = F.AddSpriteButton( G.A03[3], n .. "-" .. d,  "entity/" .. n .. "-" .. d )
 		end
 	end
+	global.GUIS[id] = G
 end
-
 F.AddFrame = function( f, n, s )
 	return f.add{ type = "frame", name = n, direction = "vertical", style = s or nil }
 end
-
+F.AddLabel = function( f, n, c )
+	return f.add{ type = "label", name = n, caption = c }
+end
 F.AddTable = function( f, n, c )
 	return f.add{ type = "table", name = n, column_count = c, style = "Senpais-Pipe-Table" }
 end
-
 F.AddSpriteButton = function( f, n, s )
 	return f.add{ type = "sprite-button", name = n, style = "Senpais-Pipes-Button", sprite = s }
 end
