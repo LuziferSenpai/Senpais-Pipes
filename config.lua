@@ -223,5 +223,7 @@ Senpais.Pipes.Directions["W-N-S-void"] =
 	tex = "t_left"
 }
 
-Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector"] = true
-Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector-south"] = true
+Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector-0"] = true
+Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector-2"] = true
+Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector-4"] = true
+Senpais.Pipes.NOCOPYS["factory-fluid-dummy-connector-6"] = true
