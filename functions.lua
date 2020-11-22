@@ -39,11 +39,11 @@ F.Players = function()
 end
 F.GUI = function( p, n, v, id )
 	local G = {}
-	G.A01 = F.AddFrame( p, "SenpaisPipesFrame01" )	
+	G.A01 = F.AddFrame( p, "SenpaisPipesFrame01", "inner_frame_in_outer_frame" )	
 	G.A02 =
 	{
 		F.AddTable( G.A01, "SenpaisPipesTable01", 2 ),
-		F.AddFrame( G.A01, "SenpaisPipesFrame02", "image_frame" ),
+		F.AddFrame( G.A01, "SenpaisPipesFrame02", "inside_shallow_frame_with_padding" ),
 		F.AddLabel( G.A01, "SenpaisPipesLabelWithDirection", n ),
 		F.AddLabel( G.A01, "SenpaisPipesLabelWithoutDirection", n )
 	}
